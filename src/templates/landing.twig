@@ -1,0 +1,19 @@
+{# This is the landing template, extend it from the base template #}
+{% extends "base.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="landing.css">
+{% endblock %}
+
+{% block content %}
+    <h1>Welcome to the uCodes Twig Starter Template</h1>
+    <p>Edit the files to get started</p>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script src="landing.js"></script>
+{% endblock %}

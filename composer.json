@@ -1,0 +1,20 @@
+{
+    "name": "ucodes/twig-starter-template",
+    "description": "This is a starter template built with love by uCodes to speed up twig development.",
+    "type": "project",
+    "require": {
+        "twig/twig":"^3.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ucodes\\TwigStarterTemplate\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ucodes",
+            "email": "ummuktar917@gmail.com"
+        }
+    ]
+}
