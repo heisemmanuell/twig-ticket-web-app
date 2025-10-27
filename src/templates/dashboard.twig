@@ -16,6 +16,7 @@
 {% endblock %}
 
 {% block scripts %}
-    {{ parent() }}
-    <script src="dashboard.js"></script>
+    {{parent()}}
+        {# Import or write javascript directly inhere #}
+        {# <script src="script.js"></script> #}
 {% endblock %}
