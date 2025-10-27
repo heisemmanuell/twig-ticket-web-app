@@ -10,9 +10,12 @@ $twig = new \Twig\Environment($loader,[
 // Simple case based router: Add your routes here
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
+
+// Add cases for different routes and pass variables to the templates as needed
 switch($path){
     case '/':
     case '/home':
+        // Eg: passing a 'title' variable to the landing.twig template
         echo $twig->render('landing.twig',[
             'title'=> "Landing Page - Twig Starter Template",
             
