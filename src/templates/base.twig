@@ -1,24 +1,45 @@
-{# This is the base twig file, extend it from other twig files #}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}Twig Starter Template{% endblock %}</title>
-        {% block styles %}
-            <link rel="stylesheet" href="/styles/out.tailwind.css">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Ticket Web App{% endblock %}</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    #root {
+  max-width: 1440px;
+  margin: 0 auto;
+  /* text-align: center; */
+}
+    /* Custom animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        {% endblock %}
-    </head>
+    .animate-fadeIn {
+      animation: fadeIn 0.5s ease-out;
+    }
 
-    <body>
-        {% block content %}
-            {# Main content goes here from extended templates #}
-        {% endblock %}
-        
-        {% block scripts %}
-            {# Import or write javascript directly inhere #}
-            {# <script src="script.js"></script> #}
-        {% endblock %}
-    </body>
+    /* Remove default link underline */
+    .no-underline {
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body class=" max-w-[1440px] mx-auto">
+  <div class="app-container min-h-screen">
+    {% block content %}{% endblock %}
+  </div>
+  {% include './components/footer.twig' %}
+</body>
 </html>

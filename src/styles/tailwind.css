@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+/* Global app container max-width */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}

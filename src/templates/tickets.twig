@@ -1,0 +1,622 @@
+{% extends "base.twig" %}
+
+{% block title %}Tickets - Ticket Web App{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <header class="bg-white shadow">
+    <div class="px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-6">
+        <div class="flex items-center">
+          <h1 class="text-2xl font-bold text-gray-900">Ticket Web App</h1>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center space-x-6">
+          <a
+            href="/dashboard"
+            class="text-gray-700 font-medium hover:text-indigo-600 transition-colors"
+          >
+            Dashboard
+          </a>
+          <a
+            href="/tickets"
+            class="text-gray-900 font-medium hover:text-indigo-600 transition-colors"
+          >
+            Tickets
+          </a>
+          <button
+            onclick="handleLogout()"
+            class="flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Logout
+          </button>
+        </nav>
+
+        <!-- Mobile menu button -->
+        <button
+          onclick="toggleMobileMenu()"
+          class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          id="mobile-menu-button"
+        >
+          <svg id="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <svg id="close-icon" class="hidden" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Navigation -->
+      <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-gray-200 animate-fadeIn">
+        <nav class="flex flex-col space-y-3">
+          <a
+            href="/dashboard"
+            class="text-gray-700 font-medium hover:text-indigo-600 transition-colors py-2"
+          >
+            Dashboard
+          </a>
+          <a
+            href="/tickets"
+            class="text-gray-900 font-medium hover:text-indigo-600 transition-colors py-2"
+          >
+            Tickets
+          </a>
+          <div class="py-2 border-t border-gray-200">
+            <button
+              onclick="handleLogout()"
+              class="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 shadow-md"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              Logout
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="py-6 sm:px-6 lg:px-8">
+    <div class="px-4 py-6 sm:px-0">
+      <!-- Filter Buttons and Create Button -->
+      <div class="mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <!-- Filter Buttons -->
+          <div class="flex flex-wrap gap-2">
+            <button
+              onclick="setFilter('all')"
+              id="filter-all"
+              class="px-4 py-2 rounded-lg text-sm font-medium capitalize transition duration-300 bg-indigo-600 text-white shadow-lg"
+            >
+              All
+            </button>
+            <button
+              onclick="setFilter('open')"
+              id="filter-open"
+              class="px-4 py-2 rounded-lg text-sm font-medium capitalize transition duration-300 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:shadow-md"
+            >
+              Open
+            </button>
+            <button
+              onclick="setFilter('in_progress')"
+              id="filter-in_progress"
+              class="px-4 py-2 rounded-lg text-sm font-medium capitalize transition duration-300 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:shadow-md"
+            >
+              In Progress
+            </button>
+            <button
+              onclick="setFilter('closed')"
+              id="filter-closed"
+              class="px-4 py-2 rounded-lg text-sm font-medium capitalize transition duration-300 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:shadow-md"
+            >
+              Closed
+            </button>
+          </div>
+
+          <!-- Create Ticket Button -->
+          <button
+            onclick="openCreateModal()"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300 self-start sm:self-auto"
+          >
+            Create Ticket
+          </button>
+        </div>
+      </div>
+
+      <!-- Tickets Grid -->
+      <div id="ticketsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Tickets will be loaded here -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="col-span-full bg-white rounded-xl shadow-lg border border-gray-200 p-8 text-center hidden">
+        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No tickets found</h3>
+        <p class="text-gray-500 mb-4">No tickets match the selected filter.</p>
+        <button
+          onclick="openCreateModal()"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition duration-300"
+        >
+          Create Your First Ticket
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Create/Edit Modal -->
+  <div id="ticketModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 id="modalTitle" class="text-xl font-bold text-gray-900">Create New Ticket</h2>
+          <button
+            onclick="closeModal()"
+            class="text-gray-400 hover:text-gray-600"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <form id="ticketForm" class="space-y-4">
+          <div>
+            <label for="ticketTitle" class="block text-sm font-medium text-gray-700 mb-1">
+              Title *
+            </label>
+            <input
+              type="text"
+              id="ticketTitle"
+              name="title"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Enter ticket title"
+            />
+            <p id="titleError" class="mt-1 text-sm text-red-600 hidden"></p>
+          </div>
+
+          <div>
+            <label for="ticketDescription" class="block text-sm font-medium text-gray-700 mb-1">
+              Description
+            </label>
+            <textarea
+              id="ticketDescription"
+              name="description"
+              rows="3"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Enter ticket description (optional)"
+            ></textarea>
+            <p id="descriptionError" class="mt-1 text-sm text-red-600 hidden"></p>
+          </div>
+
+          <div>
+            <label for="ticketStatus" class="block text-sm font-medium text-gray-700 mb-1">
+              Status *
+            </label>
+            <select
+              id="ticketStatus"
+              name="status"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <option value="open">Open</option>
+              <option value="in_progress">In Progress</option>
+              <option value="closed">Closed</option>
+            </select>
+            <p id="statusError" class="mt-1 text-sm text-red-600 hidden"></p>
+          </div>
+
+          <div>
+            <label for="ticketPriority" class="block text-sm font-medium text-gray-700 mb-1">
+              Priority
+            </label>
+            <select
+              id="ticketPriority"
+              name="priority"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+            <p id="priorityError" class="mt-1 text-sm text-red-600 hidden"></p>
+          </div>
+
+          <div class="flex space-x-3 pt-4">
+            <button
+              type="button"
+              onclick="closeModal()"
+              class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition duration-300"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              id="submitBtn"
+              class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition duration-300"
+            >
+              Create Ticket
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg hidden z-50">
+    <p id="toastMessage"></p>
+  </div>
+</div>
+
+<script>
+  let currentUser = null;
+  let tickets = [];
+  let editingTicketId = null;
+  let currentFilter = 'all';
+
+  // Mobile menu toggle
+  function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    mobileMenu.classList.toggle('hidden');
+    menuIcon.classList.toggle('hidden');
+    closeIcon.classList.toggle('hidden');
+  }
+
+  // Logout handler
+  function handleLogout() {
+    localStorage.removeItem('ticketapp_session');
+    window.location.href = '/auth/login';
+  }
+
+  // Check authentication
+  function checkAuth() {
+    const session = localStorage.getItem('ticketapp_session');
+    if (!session) {
+      window.location.href = '/auth/login';
+      return false;
+    }
+    try {
+      currentUser = JSON.parse(session);
+      return true;
+    } catch (error) {
+      window.location.href = '/auth/login';
+      return false;
+    }
+  }
+
+  // Set filter
+  function setFilter(filter) {
+    currentFilter = filter;
+
+    // Update button styles
+    document.querySelectorAll('[id^="filter-"]').forEach(btn => {
+      btn.className = 'px-4 py-2 rounded-lg text-sm font-medium capitalize transition duration-300 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:shadow-md';
+    });
+    document.getElementById(`filter-${filter}`).className = 'px-4 py-2 rounded-lg text-sm font-medium capitalize transition duration-300 bg-indigo-600 text-white shadow-lg';
+
+    renderTickets();
+  }
+
+  // Load tickets
+  function loadTickets() {
+    if (!currentUser) return;
+
+    tickets = JSON.parse(localStorage.getItem(`tickets_${currentUser.id}`) || '[]');
+    renderTickets();
+  }
+
+  // Render tickets
+  function renderTickets() {
+    const grid = document.getElementById('ticketsGrid');
+    const emptyState = document.getElementById('emptyState');
+
+    const filteredTickets = tickets.filter(ticket => {
+      if (currentFilter === 'all') return true;
+      return ticket.status === currentFilter;
+    });
+
+    if (filteredTickets.length === 0) {
+      grid.innerHTML = '';
+      emptyState.classList.remove('hidden');
+      return;
+    }
+
+    emptyState.classList.add('hidden');
+
+    grid.innerHTML = filteredTickets.map(ticket => `
+      <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition duration-300">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                ${ticket.title}
+              </h3>
+              ${ticket.description ? `<p class="text-sm text-gray-600 mb-3 line-clamp-3">${ticket.description}</p>` : ''}
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between mb-4">
+            <span class="status-badge status-${ticket.status} text-xs font-medium px-3 py-1 rounded-full border">
+              ${ticket.status.replace('_', ' ').toUpperCase()}
+            </span>
+            ${ticket.priority ? `<span class="priority-badge priority-${ticket.priority} text-xs font-medium px-2 py-1 rounded-full">
+              ${ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1)}
+            </span>` : ''}
+          </div>
+
+          <div class="text-xs text-gray-500 mb-4">
+            Created: ${new Date(ticket.createdAt).toLocaleDateString()}
+            ${ticket.updatedAt !== ticket.createdAt ? `<span class="ml-2">• Updated: ${new Date(ticket.updatedAt).toLocaleDateString()}</span>` : ''}
+          </div>
+
+          <div class="flex space-x-2">
+            <button onclick="editTicket('${ticket.id}')" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition duration-300">
+              Edit
+            </button>
+            <button onclick="deleteTicket('${ticket.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition duration-300">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Modal functions
+  function openCreateModal() {
+    editingTicketId = null;
+    document.getElementById('modalTitle').textContent = 'Create New Ticket';
+    document.getElementById('ticketForm').reset();
+    document.getElementById('submitBtn').textContent = 'Create Ticket';
+    document.getElementById('ticketModal').classList.remove('hidden');
+    clearErrors();
+  }
+
+  function editTicket(id) {
+    const ticket = tickets.find(t => t.id === id);
+    if (!ticket) return;
+
+    editingTicketId = id;
+    document.getElementById('modalTitle').textContent = 'Edit Ticket';
+    document.getElementById('ticketTitle').value = ticket.title;
+    document.getElementById('ticketDescription').value = ticket.description || '';
+    document.getElementById('ticketStatus').value = ticket.status;
+    document.getElementById('ticketPriority').value = ticket.priority || 'medium';
+    document.getElementById('submitBtn').textContent = 'Update Ticket';
+    document.getElementById('ticketModal').classList.remove('hidden');
+    clearErrors();
+  }
+
+  function closeModal() {
+    document.getElementById('ticketModal').classList.add('hidden');
+    editingTicketId = null;
+  }
+
+  // Delete function
+  function deleteTicket(id) {
+    if (!window.confirm('Are you sure you want to delete this ticket? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      tickets = tickets.filter(t => t.id !== id);
+      saveTickets();
+      renderTickets();
+      showToast('Ticket deleted successfully!');
+    } catch (error) {
+      showToast('Failed to delete ticket. Please try again.', true);
+    }
+  }
+
+  // Clear form errors
+  function clearErrors() {
+    document.getElementById('titleError').classList.add('hidden');
+    document.getElementById('descriptionError').classList.add('hidden');
+    document.getElementById('statusError').classList.add('hidden');
+    document.getElementById('priorityError').classList.add('hidden');
+  }
+
+  // Form submission
+  document.getElementById('ticketForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const title = document.getElementById('ticketTitle').value.trim();
+    const description = document.getElementById('ticketDescription').value.trim();
+    const status = document.getElementById('ticketStatus').value;
+    const priority = document.getElementById('ticketPriority').value;
+
+    let isValid = true;
+    clearErrors();
+
+    // Validate title
+    if (!title) {
+      document.getElementById('titleError').textContent = 'Title is required';
+      document.getElementById('titleError').classList.remove('hidden');
+      isValid = false;
+    } else if (title.length < 3) {
+      document.getElementById('titleError').textContent = 'Title must be at least 3 characters';
+      document.getElementById('titleError').classList.remove('hidden');
+      isValid = false;
+    } else if (title.length > 100) {
+      document.getElementById('titleError').textContent = 'Title must be less than 100 characters';
+      document.getElementById('titleError').classList.remove('hidden');
+      isValid = false;
+    }
+
+    // Validate description
+    if (description && description.length > 500) {
+      document.getElementById('descriptionError').textContent = 'Description must be less than 500 characters';
+      document.getElementById('descriptionError').classList.remove('hidden');
+      isValid = false;
+    }
+
+    // Validate status
+    if (!status || !['open', 'in_progress', 'closed'].includes(status)) {
+      document.getElementById('statusError').textContent = 'Invalid status value';
+      document.getElementById('statusError').classList.remove('hidden');
+      isValid = false;
+    }
+
+    // Validate priority
+    if (!priority || !['low', 'medium', 'high'].includes(priority)) {
+      document.getElementById('priorityError').textContent = 'Invalid priority value';
+      document.getElementById('priorityError').classList.remove('hidden');
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
+    if (editingTicketId) {
+      // Update existing ticket
+      const index = tickets.findIndex(t => t.id === editingTicketId);
+      if (index !== -1) {
+        tickets[index] = {
+          ...tickets[index],
+          title,
+          description: description || undefined,
+          status,
+          priority,
+          updatedAt: new Date().toISOString()
+        };
+        showToast('Ticket updated successfully!');
+      }
+    } else {
+      // Create new ticket
+      const newTicket = {
+        id: Date.now().toString(),
+        title,
+        description: description || undefined,
+        status,
+        priority,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      tickets.push(newTicket);
+      showToast('Ticket created successfully!');
+    }
+
+    saveTickets();
+    renderTickets();
+    closeModal();
+  });
+
+  // Save tickets to localStorage
+  function saveTickets() {
+    if (!currentUser) return;
+    localStorage.setItem(`tickets_${currentUser.id}`, JSON.stringify(tickets));
+  }
+
+  // Toast notification
+  function showToast(message, isError = false) {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+
+    toastMessage.textContent = message;
+    toast.className = `fixed bottom-4 right-4 text-white px-4 py-2 rounded-md shadow-lg z-50 ${isError ? 'bg-red-500' : 'bg-green-500'}`;
+    toast.classList.remove('hidden');
+
+    setTimeout(() => {
+      toast.classList.add('hidden');
+    }, 3000);
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', function() {
+    if (checkAuth()) {
+      loadTickets();
+    }
+  });
+</script>
+
+<style>
+  .status-open {
+    background-color: #dcfce7;
+    color: #166534;
+    border-color: #bbf7d0;
+  }
+
+  .status-in_progress {
+    background-color: #fef3c7;
+    color: #92400e;
+    border-color: #fde68a;
+  }
+
+  .status-closed {
+    background-color: #f3f4f6;
+    color: #374151;
+    border-color: #d1d5db;
+  }
+
+  .priority-low {
+    background-color: #dbeafe;
+    color: #1e40af;
+  }
+
+  .priority-medium {
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+
+  .priority-high {
+    background-color: #fee2e2;
+    color: #dc2626;
+  }
+
+  .no-underline {
+    text-decoration: none;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out;
+  }
+</style>
+{% endblock %}
