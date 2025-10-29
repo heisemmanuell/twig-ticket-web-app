@@ -115,14 +115,12 @@
     document.getElementById('confirmPasswordError').classList.add('hidden');
     hideToast();
 
-    // Validate name
     if (!name || name.length < 2) {
       document.getElementById('nameError').textContent = 'Name must be at least 2 characters long.';
       document.getElementById('nameError').classList.remove('hidden');
       isValid = false;
     }
 
-    // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
       document.getElementById('emailError').textContent = 'Please enter a valid email address.';
@@ -130,14 +128,12 @@
       isValid = false;
     }
 
-    // Validate password
     if (!password || password.length < 6) {
       document.getElementById('passwordError').textContent = 'Password must be at least 6 characters long.';
       document.getElementById('passwordError').classList.remove('hidden');
       isValid = false;
     }
 
-    // Validate confirm password
     if (password !== confirmPassword) {
       document.getElementById('confirmPasswordError').textContent = 'Passwords do not match.';
       document.getElementById('confirmPasswordError').classList.remove('hidden');
@@ -173,7 +169,6 @@
       email: newUser.email
     }));
 
-    // Redirect to dashboard
     window.location.href = '/dashboard';
   });
 

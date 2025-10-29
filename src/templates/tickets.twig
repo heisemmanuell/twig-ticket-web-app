@@ -289,7 +289,7 @@
   // Logout handler
   function handleLogout() {
     localStorage.removeItem('ticketapp_session');
-    window.location.href = '/auth/login';
+    window.location.href = '/';
   }
 
   // Check authentication
@@ -361,10 +361,10 @@
 
           <div class="flex items-center justify-between mb-4">
             <span class="status-badge status-${ticket.status} text-xs font-medium px-3 py-1 rounded-full border">
-              ${ticket.status.replace('_', ' ').toUpperCase()}
+              STATUS: ${ticket.status.replace('_', ' ').toUpperCase()}
             </span>
             ${ticket.priority ? `<span class="priority-badge priority-${ticket.priority} text-xs font-medium px-2 py-1 rounded-full">
-              ${ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1)}
+              PRIORITY: ${ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1)}
             </span>` : ''}
           </div>
 
@@ -452,7 +452,6 @@
     let isValid = true;
     clearErrors();
 
-    // Validate title
     if (!title) {
       document.getElementById('titleError').textContent = 'Title is required';
       document.getElementById('titleError').classList.remove('hidden');
@@ -467,21 +466,18 @@
       isValid = false;
     }
 
-    // Validate description
     if (description && description.length > 500) {
       document.getElementById('descriptionError').textContent = 'Description must be less than 500 characters';
       document.getElementById('descriptionError').classList.remove('hidden');
       isValid = false;
     }
 
-    // Validate status
     if (!status || !['open', 'in_progress', 'closed'].includes(status)) {
       document.getElementById('statusError').textContent = 'Invalid status value';
       document.getElementById('statusError').classList.remove('hidden');
       isValid = false;
     }
 
-    // Validate priority
     if (!priority || !['low', 'medium', 'high'].includes(priority)) {
       document.getElementById('priorityError').textContent = 'Invalid priority value';
       document.getElementById('priorityError').classList.remove('hidden');

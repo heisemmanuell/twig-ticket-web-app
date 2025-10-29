@@ -46,7 +46,7 @@
               placeholder="Enter your password"
             />
           </div>
-          <p id="passwordError" class="mt-1 text-sm text-red-600 hidden"></p>
+          <p id="passwordError" class="mt-1 text-sm text-green-600 hidden"></p>
         </div>
 
         <div>
@@ -76,12 +76,10 @@
     const password = document.getElementById('password').value.trim();
     let isValid = true;
 
-    // Clear previous errors
     document.getElementById('emailError').classList.add('hidden');
     document.getElementById('passwordError').classList.add('hidden');
     hideToast();
 
-    // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
       document.getElementById('emailError').textContent = 'Please enter a valid email address.';
@@ -89,7 +87,6 @@
       isValid = false;
     }
 
-    // Validate password
     if (!password) {
       document.getElementById('passwordError').textContent = 'Password is required.';
       document.getElementById('passwordError').classList.remove('hidden');
@@ -109,7 +106,6 @@
         name: user.name,
         email: user.email
       }));
-      // Redirect to dashboard
       window.location.href = '/dashboard';
       showToast('Login successful! Welcome back.');
     } else {

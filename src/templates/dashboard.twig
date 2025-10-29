@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="min-h-screen bg-gray-50">
-  <!-- Header -->
   <header class="bg-white shadow">
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center py-6">
@@ -98,9 +97,8 @@
         <span id="welcome-message" class="text-gray-700">Welcome back! 👋</span>
       </div>
 
-      <!-- Summary Statistics -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <!-- Total Tickets -->
+        
         <div class="bg-white overflow-hidden shadow-lg rounded-xl border border-gray-200 pt-5 pb-5">
           <div class="p-6">
             <div class="flex items-center">
@@ -121,7 +119,6 @@
           </div>
         </div>
 
-        <!-- Open Tickets -->
         <div class="bg-white overflow-hidden shadow-lg rounded-xl border border-gray-200 pt-5 pb-5">
           <div class="p-6">
             <div class="flex items-center">
@@ -143,7 +140,6 @@
           </div>
         </div>
 
-        <!-- In Progress Tickets -->
         <div class="bg-white overflow-hidden shadow-lg rounded-xl border border-gray-200 pt-5 pb-5">
           <div class="p-6">
             <div class="flex items-center">
@@ -165,7 +161,6 @@
           </div>
         </div>
 
-        <!-- Closed Tickets -->
         <div class="bg-white overflow-hidden shadow-lg rounded-xl border border-gray-200 pt-5 pb-5">
           <div class="p-6">
             <div class="flex items-center">
@@ -190,13 +185,10 @@
 
       <hr class="mb-5 border-black">
 
-      <!-- Quick Actions -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <h2 class="text-2xl font-bold text-gray-900 mb-4 col-span-full">
           Quick Actions
         </h2>
-
-        <!-- Create New Ticket -->
         
           <a href="/tickets"
           class="bg-white hover:bg-gray-200 transition shadow-lg rounded-xl border border-gray-200 p-6 flex items-start gap-4 no-underline"
@@ -217,8 +209,6 @@
             </p>
           </div>
         </a>
-
-        <!-- Manage Tickets -->
         
           <a href="/tickets"
           class="bg-white hover:bg-gray-200 transition shadow-lg rounded-xl border border-gray-200 p-6 flex items-start gap-4 no-underline"
@@ -243,7 +233,6 @@
 </div>
 
 <script>
-  // Mobile menu toggle
   function toggleMobileMenu() {
     const mobileMenu = document.getElementById('mobile-menu');
     const menuIcon = document.getElementById('menu-icon');
@@ -254,9 +243,7 @@
     closeIcon.classList.toggle('hidden');
   }
 
-  // Logout handler
   function handleLogout() {
-    // Clear session
     localStorage.removeItem('ticketapp_session');
     window.location.href = '/';
   }
